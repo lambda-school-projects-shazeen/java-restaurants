@@ -68,7 +68,7 @@ public class Restaurant
      * connects restaurants to the restaurant payments combination
      */
     @OneToMany(mappedBy = "restaurant",
-        cascade = CascadeType.ALL)
+        cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = "restaurant",
         allowSetters = true)
     private Set<RestaurantPayments> payments = new HashSet<>();

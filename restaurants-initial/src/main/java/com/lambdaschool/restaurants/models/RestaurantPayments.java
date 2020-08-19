@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,6 +18,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "restaurantpayments")
+@IdClass(RestaurantPaymentsId.class)
 public class RestaurantPayments
     extends Auditable
     implements Serializable
@@ -105,22 +107,6 @@ public class RestaurantPayments
     }
 
     @Override
-
-    /*
-       public boolean equals(Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (!(o instanceof UserRoles))
-        {
-            return false;
-        }
-        UserRoles that = (UserRoles) o;
-        return ((user == null) ? 0 : user.getUserid()) == ((that.user == null) ? 0 : that.user.getUserid()) &&
-               ((role == null) ? 0 : role.getRoleid()) == ((that.role == null) ? 0 : that.role.getRoleid());
-     */
     public boolean equals(Object o)
     {
         if (this == o)
@@ -133,7 +119,7 @@ public class RestaurantPayments
         }
         RestaurantPayments that = (RestaurantPayments) o;
         return ((restaurant == null) ? 0 : restaurant.getRestaurantid()) == ((that.restaurant == null) ? 0 : that.restaurant.getRestaurantid()) &&
-                ((payment == null) ? 0 : payment.getPaymentid()) == ((that.payment == null) ? 0 : that.payment.getPaymentid());
+               ((payment == null) ? 0 : payment.getPaymentid()) == ((that.payment == null) ? 0 : that.payment.getPaymentid());
     }
 
     @Override

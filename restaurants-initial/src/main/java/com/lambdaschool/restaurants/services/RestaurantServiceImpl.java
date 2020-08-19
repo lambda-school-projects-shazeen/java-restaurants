@@ -109,9 +109,8 @@ public class RestaurantServiceImpl
 
         if (restaurant.getRestaurantid() != 0)
         {
-            Restaurant oldRestaurant = restrepos.findById(restaurant.getRestaurantid())
+            restrepos.findById(restaurant.getRestaurantid())
                     .orElseThrow(() -> new EntityNotFoundException("Restaurant id " + restaurant.getRestaurantid() + " not found!"));
-
             newRestaurant.setRestaurantid(restaurant.getRestaurantid());
         }
 

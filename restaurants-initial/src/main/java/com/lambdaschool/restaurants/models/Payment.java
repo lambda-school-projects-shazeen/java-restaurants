@@ -42,7 +42,7 @@ public class Payment
      * connects payments to the payment restaurant combination
      */
     @OneToMany(mappedBy = "payment",
-        cascade = CascadeType.ALL)
+        cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties(value = "payment",
         allowSetters = true)
     private Set<RestaurantPayments> restaurants = new HashSet<>();
