@@ -140,6 +140,7 @@ Status OK
 
 </details>
 
+<details>
 <summary>http://localhost:2019/restaurants/restaurant/10</summary>
 
 ```JSON
