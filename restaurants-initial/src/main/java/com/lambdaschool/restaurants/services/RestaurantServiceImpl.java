@@ -1,5 +1,6 @@
 package com.lambdaschool.restaurants.services;
 
+import com.lambdaschool.restaurants.exceptions.ResourceNotFoundException;
 import com.lambdaschool.restaurants.models.Menu;
 import com.lambdaschool.restaurants.models.Payment;
 import com.lambdaschool.restaurants.models.Restaurant;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +20,7 @@ import java.util.List;
 @Transactional
 @Service(value = "restaurantService")
 public class RestaurantServiceImpl
-        implements RestaurantService
+    implements RestaurantService
 {
     /**
      * Connects this service to the restaurants table
@@ -49,10 +49,11 @@ public class RestaurantServiceImpl
 
     @Override
     public List<Restaurant> findNameCity(
-            String name,
-            String city)
+        String name,
+        String city)
     {
-        List<Restaurant> list = restrepos.findByNameContainingIgnoreCaseAndCityContainingIgnoreCase(name, city);
+        List<Restaurant> list = restrepos.findByNameContainingIgnoreCaseAndCityContainingIgnoreCase(name,
+            city);
         return list;
     }
 
@@ -61,28 +62,28 @@ public class RestaurantServiceImpl
     {
         List<Restaurant> list = new ArrayList<>();
         restrepos.findAll()
-                .iterator()
-                .forEachRemaining(list::add);
+            .iterator()
+            .forEachRemaining(list::add);
         return list;
     }
 
     @Override
     public Restaurant findRestaurantById(long id) throws
-            EntityNotFoundException
+                                                  ResourceNotFoundException
     {
         return restrepos.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurant id " + id + " not found!"));
+            .orElseThrow(() -> new ResourceNotFoundException("Restaurant id " + id + " not found!"));
     }
 
     @Override
     public Restaurant findRestaurantByName(String name) throws
-            EntityNotFoundException
+                                                        ResourceNotFoundException
     {
         Restaurant restaurant = restrepos.findByName(name);
 
         if (restaurant == null)
         {
-            throw new EntityNotFoundException("Restaurant " + name + " not found!");
+            throw new ResourceNotFoundException("Restaurant " + name + " not found!");
         }
 
         return restaurant;
@@ -92,12 +93,12 @@ public class RestaurantServiceImpl
     public void delete(long id)
     {
         if (restrepos.findById(id)
-                .isPresent())
+            .isPresent())
         {
             restrepos.deleteById(id);
         } else
         {
-            throw new EntityNotFoundException("Restaurant id " + id + " not found!");
+            throw new ResourceNotFoundException("Restaurant id " + id + " not found!");
         }
     }
 
@@ -110,7 +111,7 @@ public class RestaurantServiceImpl
         if (restaurant.getRestaurantid() != 0)
         {
             restrepos.findById(restaurant.getRestaurantid())
-                    .orElseThrow(() -> new EntityNotFoundException("Restaurant id " + restaurant.getRestaurantid() + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant id " + restaurant.getRestaurantid() + " not found!"));
             newRestaurant.setRestaurantid(restaurant.getRestaurantid());
         }
 
@@ -121,24 +122,27 @@ public class RestaurantServiceImpl
         newRestaurant.setTelephone(restaurant.getTelephone());
 
         newRestaurant.getPayments()
-                .clear();
+            .clear();
         for (RestaurantPayments rp : restaurant.getPayments())
         {
             Payment newPayment = payrepos.findById(rp.getPayment()
-                                                           .getPaymentid())
-                    .orElseThrow(() -> new EntityNotFoundException("Payment id " + rp.getPayment()
-                            .getPaymentid() + " not found!"));
+                .getPaymentid())
+                .orElseThrow(() -> new ResourceNotFoundException("Payment id " + rp.getPayment()
+                    .getPaymentid() + " not found!"));
 
             newRestaurant.getPayments()
-                    .add(new RestaurantPayments(newRestaurant, newPayment));
+                .add(new RestaurantPayments(newRestaurant,
+                    newPayment));
         }
 
         newRestaurant.getMenus()
-                .clear();
+            .clear();
         for (Menu m : restaurant.getMenus())
         {
             newRestaurant.getMenus()
-                    .add(new Menu(m.getDish(), m.getPrice(), newRestaurant));
+                .add(new Menu(m.getDish(),
+                    m.getPrice(),
+                    newRestaurant));
         }
 
         return restrepos.save(newRestaurant);
@@ -147,11 +151,11 @@ public class RestaurantServiceImpl
     @Transactional
     @Override
     public Restaurant update(
-            Restaurant restaurant,
-            long id)
+        Restaurant restaurant,
+        long id)
     {
         Restaurant currentRestaurant = restrepos.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurant " + id + " not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("Restaurant " + id + " not found"));
 
         if (restaurant.getName() != null)
         {
@@ -179,29 +183,32 @@ public class RestaurantServiceImpl
         }
 
         if (restaurant.getPayments()
-                .size() > 0)
+            .size() > 0)
         {
             for (RestaurantPayments rp : restaurant.getPayments())
             {
                 Payment newPayment = payrepos.findById(rp.getPayment()
-                                                               .getPaymentid())
-                        .orElseThrow(() -> new EntityNotFoundException("Payment id " + rp.getPayment()
-                                .getPaymentid() + " not found!"));
+                    .getPaymentid())
+                    .orElseThrow(() -> new ResourceNotFoundException("Payment id " + rp.getPayment()
+                        .getPaymentid() + " not found!"));
 
                 currentRestaurant.getPayments()
-                        .add(new RestaurantPayments(currentRestaurant, newPayment));
+                    .add(new RestaurantPayments(currentRestaurant,
+                        newPayment));
             }
         }
 
         if (restaurant.getMenus()
-                .size() > 0)
+            .size() > 0)
         {
             currentRestaurant.getMenus()
-                    .clear();
+                .clear();
             for (Menu m : restaurant.getMenus())
             {
                 currentRestaurant.getMenus()
-                        .add(new Menu(m.getDish(), m.getPrice(), currentRestaurant));
+                    .add(new Menu(m.getDish(),
+                        m.getPrice(),
+                        currentRestaurant));
             }
         }
 
