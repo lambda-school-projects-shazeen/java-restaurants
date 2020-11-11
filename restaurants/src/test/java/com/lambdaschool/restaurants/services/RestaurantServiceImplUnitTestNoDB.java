@@ -1,5 +1,6 @@
 package com.lambdaschool.restaurants.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lambdaschool.restaurants.RestaurantsApplication;
 import com.lambdaschool.restaurants.exceptions.ResourceNotFoundException;
 import com.lambdaschool.restaurants.models.Menu;
@@ -457,7 +458,7 @@ public class RestaurantServiceImplUnitTestNoDB
     }
 
     @Test
-    public void i_update()
+    public void i_update() throws Exception
     {
         String rest2Name = "Test Eagle Cafe";
         Restaurant r2 = new Restaurant(rest2Name,
@@ -486,8 +487,14 @@ public class RestaurantServiceImplUnitTestNoDB
                 12.75,
                 r2));
 
+        // I need a copy of r2 to send to update so the original r2 is not changed.
+        // I am using Jackson to make a clone of the object
+        ObjectMapper objectMapper = new ObjectMapper();
+        Restaurant r3 = objectMapper
+            .readValue(objectMapper.writeValueAsString(r2), Restaurant.class);
+
         Mockito.when(restrepos.findById(10L))
-            .thenReturn(Optional.of(r2));
+            .thenReturn(Optional.of(r3));
         Mockito.when(payrepos.findById(1L))
             .thenReturn(Optional.of(pay1));
         Mockito.when(payrepos.findById(2L))
@@ -552,7 +559,7 @@ public class RestaurantServiceImplUnitTestNoDB
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void iii_updatePayTypeNotFound()
+    public void iii_updatePayTypeNotFound() throws Exception
     {
         String rest2Name = "Test BarnBarn's Place";
         Restaurant r2 = new Restaurant(rest2Name,
@@ -560,7 +567,7 @@ public class RestaurantServiceImplUnitTestNoDB
             "Town",
             "ST",
             "555-555-5555");
-        r2.setRestaurantid(777);
+        r2.setRestaurantid(10);
         Payment pay1 = new Payment("Unknown1");
         pay1.setPaymentid(1);
         Payment pay2 = new Payment("Unknown2");
@@ -581,8 +588,14 @@ public class RestaurantServiceImplUnitTestNoDB
                 12.75,
                 r2));
 
-        Mockito.when(restrepos.findById(777L))
-            .thenThrow(ResourceNotFoundException.class);
+        // I need a copy of r2 to send to update so the original r2 is not changed.
+        // I am using Jackson to make a clone of the object
+        ObjectMapper objectMapper = new ObjectMapper();
+        Restaurant r3 = objectMapper
+            .readValue(objectMapper.writeValueAsString(r2), Restaurant.class);
+
+        Mockito.when(restrepos.findById(10L))
+            .thenReturn(Optional.of(r3));
         Mockito.when(payrepos.findById(1L))
             .thenReturn(Optional.of(pay1));
         Mockito.when(payrepos.findById(2L))
@@ -591,7 +604,7 @@ public class RestaurantServiceImplUnitTestNoDB
         Mockito.when(restrepos.save(any(Restaurant.class)))
             .thenReturn(r2);
         Restaurant addRestaurant = restaurantService.update(r2,
-            777);
+            10);
 
         assertNotNull(addRestaurant);
         assertEquals(rest2Name,
