@@ -34,9 +34,6 @@ import static org.mockito.ArgumentMatchers.any;
  ********************* REMEMBER TO TURN OFF SEEDDATA (both in test and main) *********************
  **************************************************************************************************/
 
-/*
-Note that a line regarding updating menus and one regarding updating payments are not tested!
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RestaurantsApplication.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
