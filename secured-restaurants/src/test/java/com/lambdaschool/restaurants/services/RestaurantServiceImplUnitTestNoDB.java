@@ -1,7 +1,7 @@
 package com.lambdaschool.restaurants.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lambdaschool.restaurants.RestaurantsApplication;
+import com.lambdaschool.restaurants.RestaurantsApplicationTests;
 import com.lambdaschool.restaurants.exceptions.ResourceNotFoundException;
 import com.lambdaschool.restaurants.models.Menu;
 import com.lambdaschool.restaurants.models.Payment;
@@ -31,7 +31,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RestaurantsApplication.class,
+@SpringBootTest(classes = RestaurantsApplicationTests.class,
     properties = {
         "command.line.runner.enabled=false"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

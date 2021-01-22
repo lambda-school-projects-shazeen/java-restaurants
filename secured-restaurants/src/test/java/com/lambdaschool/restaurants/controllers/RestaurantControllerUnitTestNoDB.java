@@ -1,7 +1,7 @@
 package com.lambdaschool.restaurants.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lambdaschool.restaurants.RestaurantsApplication;
+import com.lambdaschool.restaurants.RestaurantsApplicationTests;
 import com.lambdaschool.restaurants.models.Menu;
 import com.lambdaschool.restaurants.models.Payment;
 import com.lambdaschool.restaurants.models.Restaurant;
@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = RestaurantsApplication.class,
+    classes = RestaurantsApplicationTests.class,
     properties = {
         "command.line.runner.enabled=false"})
 @AutoConfigureMockMvc

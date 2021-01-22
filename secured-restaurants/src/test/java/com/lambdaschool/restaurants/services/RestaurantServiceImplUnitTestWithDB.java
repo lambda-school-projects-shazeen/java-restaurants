@@ -1,6 +1,6 @@
 package com.lambdaschool.restaurants.services;
 
-import com.lambdaschool.restaurants.RestaurantsApplication;
+import com.lambdaschool.restaurants.RestaurantsApplicationTests;
 import com.lambdaschool.restaurants.exceptions.ResourceNotFoundException;
 import com.lambdaschool.restaurants.models.Menu;
 import com.lambdaschool.restaurants.models.Payment;
@@ -21,7 +21,7 @@ import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RestaurantsApplication.class)
+@SpringBootTest(classes = RestaurantsApplicationTests.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestaurantServiceImplUnitTestWithDB
 {

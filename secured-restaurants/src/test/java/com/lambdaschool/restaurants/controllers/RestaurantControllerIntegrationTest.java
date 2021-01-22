@@ -1,6 +1,6 @@
 package com.lambdaschool.restaurants.controllers;
 
-import com.lambdaschool.restaurants.RestaurantsApplication;
+import com.lambdaschool.restaurants.RestaurantsApplicationTests;
 import com.lambdaschool.restaurants.models.Payment;
 import com.lambdaschool.restaurants.models.Restaurant;
 import com.lambdaschool.restaurants.services.PaymentService;
@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
@@ -34,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = RestaurantsApplication.class)
+    classes = RestaurantsApplicationTests.class)
 @AutoConfigureMockMvc
 @WithUserDetails(value = "admin")
 public class RestaurantControllerIntegrationTest
