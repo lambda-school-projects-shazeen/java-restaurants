@@ -31,6 +31,10 @@ import static org.hamcrest.number.OrderingComparison.lessThan;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/*
+  Note that here we are using WithUserDetails as we are using the database and thus have access to users
+ */
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = RestaurantsApplicationTests.class)

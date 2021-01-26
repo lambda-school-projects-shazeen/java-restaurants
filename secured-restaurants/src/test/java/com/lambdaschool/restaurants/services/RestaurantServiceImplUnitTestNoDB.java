@@ -30,6 +30,11 @@ import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 
+/*
+  Since no security checks are done in Restaurant Services,
+  nothing special with security needs to be handled in the tests
+ */
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RestaurantsApplicationTests.class,
     properties = {

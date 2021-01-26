@@ -19,6 +19,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -35,7 +37,14 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/*
+  Note that here we are using WithMockUser as we are NOT using the database
+  and thus DO NOT have access to users so need to Mock one up!
+ */
+
 @RunWith(SpringRunner.class)
+@WithMockUser(username = "admin",
+    roles = {"USER", "ADMIN"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = RestaurantsApplicationTests.class,
     properties = {
@@ -180,6 +189,7 @@ public class RestaurantControllerUnitTestNoDB
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
 
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(SecurityMockMvcConfigurers.springSecurity())
             .build();
     }
 

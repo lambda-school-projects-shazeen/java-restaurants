@@ -64,15 +64,15 @@ public class ResourceServerConfig
                 "/createnewuser")
             .permitAll()
             .antMatchers(HttpMethod.POST,
-                "/users/**", "/menus/**", "/payments/**", "/restaurants/**")
+                "/menus/**", "/payments/**", "/restaurants/**")
             .hasAnyRole("ADMIN")
             .antMatchers(HttpMethod.DELETE,
-                "/users/**", "/menus/**", "/payments/**", "/restaurants/**")
+                "/menus/**", "/payments/**", "/restaurants/**")
             .hasAnyRole("ADMIN")
             .antMatchers(HttpMethod.PUT,
-                "/users/**", "/menus/**", "/payments/**", "/restaurants/**")
+                "/menus/**", "/payments/**", "/restaurants/**")
             .hasAnyRole("ADMIN")
-            .antMatchers("/users/**",
+            .antMatchers("/users/**", "/restaurants/**", "/payments/**", "/menus/**",
                 "/oauth/revoke-token",
                 "/logout")
             .authenticated()

@@ -17,8 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+/*
+  Since no security checks are done in Restaurant Services,
+  nothing special with security needs to be handled in the tests
+ */
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RestaurantsApplicationTests.class)
@@ -28,6 +35,9 @@ public class RestaurantServiceImplUnitTestWithDB
     @Autowired
     private RestaurantService restaurantService;
 
+    @Autowired
+    private PaymentService paymentService;
+
     @Before
     public void setUp() throws Exception
     {
@@ -35,6 +45,21 @@ public class RestaurantServiceImplUnitTestWithDB
         // stubs -> fake methods
         // Java -> mocks
         MockitoAnnotations.initMocks(this);
+
+        List<Restaurant> myList = restaurantService.findAll();
+
+        for (Restaurant r : myList)
+        {
+            System.out.println("Restaurant id: " + r.getRestaurantid() + " Restaurant Name: " + r.getName());
+        }
+
+        System.out.println();
+
+        List<Payment> myPayList = paymentService.findAll();
+        for (Payment p : myPayList)
+        {
+            System.out.println("Payment id: " + p.getPaymentid() + " Payment Type: " + p.getType());
+        }
     }
 
     @After
@@ -72,7 +97,7 @@ public class RestaurantServiceImplUnitTestWithDB
     public void d_findRestaurantById()
     {
         assertEquals("Test Apple",
-            restaurantService.findRestaurantById(4)
+            restaurantService.findRestaurantById(12)
                 .getName());
     }
 
@@ -103,7 +128,7 @@ public class RestaurantServiceImplUnitTestWithDB
     @Test
     public void g_delete()
     {
-        restaurantService.delete(4);
+        restaurantService.delete(12);
         assertEquals(2,
             restaurantService.findAll()
                 .size());
@@ -130,7 +155,7 @@ public class RestaurantServiceImplUnitTestWithDB
             "555-123-1555");
 
         Payment payType1 = new Payment("Turtle");
-        payType1.setPaymentid(1);
+        payType1.setPaymentid(9);
 
         r3.getPayments()
             .add(new RestaurantPayments(r3,
@@ -183,11 +208,11 @@ public class RestaurantServiceImplUnitTestWithDB
             "Town",
             "ST",
             "555-555-5555");
-        r2.setRestaurantid(13);
+        r2.setRestaurantid(21);
         Payment pay1 = new Payment("Unknown1");
-        pay1.setPaymentid(1);
+        pay1.setPaymentid(9);
         Payment pay2 = new Payment("Unknown2");
-        pay2.setPaymentid(2);
+        pay2.setPaymentid(10);
 
         r2.getPayments()
             .clear();
@@ -261,9 +286,9 @@ public class RestaurantServiceImplUnitTestWithDB
             "555-555-5555");
         r2.setRestaurantid(10);
         Payment pay1 = new Payment("Unknown1");
-        pay1.setPaymentid(1);
+        pay1.setPaymentid(9);
         Payment pay2 = new Payment("Unknown2");
-        pay2.setPaymentid(2);
+        pay2.setPaymentid(10);
 
         r2.getPayments()
             .add(new RestaurantPayments(r2,
@@ -281,7 +306,7 @@ public class RestaurantServiceImplUnitTestWithDB
                 r2));
 
         Restaurant addRestaurant = restaurantService.update(r2,
-            10);
+            18);
 
         assertNotNull(addRestaurant);
         assertEquals(rest2Name,
