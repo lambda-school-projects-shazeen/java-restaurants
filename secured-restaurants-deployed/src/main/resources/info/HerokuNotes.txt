@@ -1,0 +1,104 @@
+# Setup Heroku
+
+heroku login
+heroku create jrmmba-stumps
+heroku addons:create heroku-postgresql:hobby-dev -a jrmmba-stumps
+heroku config -a jrmmba-stumps
+
+heroku config:set OAUTHCLIENTID=lambda-client -a jrmmba-stumps
+heroku config:set OAUTHCLIENTSECRET=lambda-secret -a jrmmba-stumps
+
+Use the heroku GUI to access log
+
+******************************
+
+# In Java
+
+# Add the plugin for heroku
+
+<finalName>jrmmba-stumps</finalName>
+
+<!-- Heroku Maven Plugin Configuration -->
+<plugin>
+    <groupId>com.heroku.sdk</groupId>
+    <artifactId>heroku-maven-plugin</artifactId>
+    <version>3.0.2</version>
+    <configuration>
+        <appName>${project.build.finalName}</appName>
+        <includeTarget>false</includeTarget>
+        <includes>
+            <include>${project.build.directory}/${project.build.finalName}.jar</include>
+        </includes>
+        <jdkVersion>${java.version}</jdkVersion>
+        <processTypes>
+            <web>java $JAVA_OPTS -Dserver.port=$PORT -jar target/${project.build.finalName}.jar</web>
+        </processTypes>
+    </configuration>
+</plugin>
+
+
+# For PostgreSQL add the dependency
+
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+</dependency>
+
+Add the DataSourceConfig class to use PostgreSQL
+Add lines to application.properties
+
+# Which db to run
+local.run.db=H2
+# local.run.db=POSTGRESQL
+
+
+# Environment Variables Needed for OAuth2 Authentication Server
+# OAUTHCLIENTID
+# OAUTHCLIENTSECRET
+
+# Find heroku info
+heroku config -a jrmmba-foundation
+
+Add SimpleCorsFilter.java to handle deploying and CORS issues
+
+******************************
+
+To deploy, go to
+
+Maven Tab
+Turn off tests
+Maven Goals
+mvn clean heroku:deploy -X
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Problem:
+
+Heroku restarts your application once every 24 hours. It does this automatically; you have no control over it. This is a good thing and is similar to my mantra of restart your computer at least once a day!
+
+However, if you leave your code as originally deployed (with creating the database turned on seeddata active), when Heroku restarts your application, any data changes made in the last 24 hours get wiped out. So much for presient data.
+
+Solution (beta):
+
+Here is a solution. Clunky but works.
+
+Deploy your application as normal using postgresql
+
+When you first deploy your application, in application.properties, you have the following set
+
+spring.jpa.hibernate.ddl-auto=create
+spring.datasource.initialization-mode=always
+
+And you may have a SeedData class.
+
+Make sure your application is running properly.
+
+Now redeploy the same application but with the following changes:
+
+in application.properties
+
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.initialization-mode=never
+command.line.runner.enabled=false
+
+So, now when your application is restarted by Heroku, seed data is not active and you can keep your old data!
