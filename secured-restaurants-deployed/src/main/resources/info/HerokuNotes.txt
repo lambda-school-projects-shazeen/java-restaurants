@@ -102,3 +102,29 @@ spring.datasource.initialization-mode=never
 command.line.runner.enabled=false
 
 So, now when your application is restarted by Heroku, seed data is not active and you can keep your old data!
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Connect H2 Console to Heroku Postgres
+
+jdbc:postgresql://ec2-52-4-177-4.compute-1.amazonaws.com/d3bgb040dnfiod
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Fork, Clone
+Make Own Branch: git checkout -b john-mitchell
+Push Branch to GitHub: git push origin john-mitchell
+
+
+Set up your Heroku applications
+Add system.properties file to the same folder as POM.XML file
+
+From your copy of the repo! Remember though you are deploying from GitHub to Heroku. Code on GitHub must be current (not just your local co)
+
+heroku login
+heroku git:remote -a jrmmba-restaurant
+git subtree push --prefix secured-restaurants-deployed/ heroku john-mitchell:master
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
