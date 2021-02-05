@@ -105,12 +105,45 @@ So, now when your application is restarted by Heroku, seed data is not active an
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Connect H2 Console to Heroku Postgres
+Connect H2 Console to Heroku Postgres 
 
 jdbc:postgresql://ec2-52-4-177-4.compute-1.amazonaws.com/d3bgb040dnfiod
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On Heroku
+Find data from Heroku Config Var for DATABASE_URL. For example
 
+postgres://username      :password                                                        @hostname                               :5432/database name
+postgres://ixewvznjaizqhw:594d518194085938e11dc6864fbe86d78a459917d205f1df07719dadbc6d684c@ec2-54-90-13-87.compute-1.amazonaws.com:5432/daiqbmjh2rj17h
+
+H2Console - http://jrmmba-restaurant.herokuapp.com/h2-console
+
+Following this example fill in the fields on the h2console
+
+Saved Settings: Generic PostgreSQL
+Setting Name:   Generic PostgreSQL
+
+Driver Class: org.postgresql.Driver
+JDBC URL:  jdbc:postgresql://ec2-54-90-13-87.compute-1.amazonaws.com/daiqbmjh2rj17h
+User Name: ixewvznjaizqhw
+Password:  594d518194085938e11dc6864fbe86d78a459917d205f1df07719dadbc6d684c
+
+
+On Local (application must be running due to needing to access the h2-console!)
+
+H2Console - http://localhost:2019/h2-console
+
+Assuming you are using the standard postgres user with a password of password and database name of restaurantdb
+
+Saved Settings: Generic PostgreSQL
+Setting Name:   Generic PostgreSQL
+
+Driver Class: org.postgresql.Driver
+JDBC URL:   jdbc:postgresql://localhost:5432/restaurantdb
+User Name:  postgres
+Password:   password
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+GitHub Heroku Deploy Manually
 
 Fork, Clone
 Make Own Branch: git checkout -b john-mitchell
@@ -120,11 +153,32 @@ Push Branch to GitHub: git push origin john-mitchell
 Set up your Heroku applications
 Add system.properties file to the same folder as POM.XML file
 
-From your copy of the repo! Remember though you are deploying from GitHub to Heroku. Code on GitHub must be current (not just your local co)
+From your copy of the repo! Remember though you are deploying from GitHub to Heroku. Code on GitHub must be current (not just your local copy)
 
 heroku login
 heroku git:remote -a jrmmba-restaurant
-git subtree push --prefix secured-restaurants-deployed/ heroku john-mitchell:master
+git subtree push --prefix secured-restaurants-deployed heroku main
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+GitHub Heroku Autodeploy
 
+see: https://stackoverflow.com/questions/39197334/automated-heroku-deploy-from-subfolder
+
+Under Deploy GitHub select repository (must have admin rights to repo)
+
+Create a config var PROJECT_PATH = secured-restaurants-deployed
+
+Under Settings BuildPack add https://github.com/timanovsky/subdir-heroku-buildpack.git. Move it to the top buildpack
+    You may wish to fork the subdir-heroku-buildpack to your own repositories
+
+Back under Deploy GitHub - pick the branch you want to deploy and enable automatic deploys
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Local Deployment to Postgres - DO NOT FOLLOW THESE STEPS ON HEROKU. HEROKU DOES THIS AUTOMATICALLY!!!
+
+Create Database (name only) in Postgres (for example restaurantdb)
+
+Assuming you are using the standard postgres user with a password of password,
+set up an env variable like the following
+
+SPRING_DATASOURCE_URL='jdbc:postgresql://localhost:5432/restaurantdb?password=password&sslmode=prefer&user=postgres'
