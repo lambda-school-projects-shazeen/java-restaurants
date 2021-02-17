@@ -18,7 +18,7 @@ public interface PaymentRepository
      */
     @Transactional
     @Modifying
-    @Query(value = "UPDATE payments SET type = :name, last_modified_by = :uname, last_modified_date = CURRENT_TIMESTAMP WHERE paymentid = :paymentid",
+    @Query(value = "UPDATE payments SET type = :name, lastmodifiedby = :uname, lastmodifieddate = CURRENT_TIMESTAMP WHERE paymentid = :paymentid",
         nativeQuery = true)
     void updatePaymentName(
         String uname,
