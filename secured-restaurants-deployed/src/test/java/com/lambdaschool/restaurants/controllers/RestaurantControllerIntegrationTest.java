@@ -59,13 +59,13 @@ public class RestaurantControllerIntegrationTest
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
 
         List<Restaurant> myList = restaurantService.findAll();
-        for(Restaurant r : myList)
+        for (Restaurant r : myList)
         {
             System.out.println(r.getRestaurantid() + " " + r.getName());
         }
 
         List<Payment> myPay = paymentService.findAll();
-        for(Payment p : myPay)
+        for (Payment p : myPay)
         {
             System.out.println(p.getPaymentid() + " " + p.getType());
         }

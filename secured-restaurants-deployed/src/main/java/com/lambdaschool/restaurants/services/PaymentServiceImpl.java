@@ -1,7 +1,6 @@
 package com.lambdaschool.restaurants.services;
 
 import com.lambdaschool.restaurants.models.Payment;
-import com.lambdaschool.restaurants.models.User;
 import com.lambdaschool.restaurants.repos.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,8 @@ public class PaymentServiceImpl implements PaymentService
         payrepos.findAll()
             .iterator()
             .forEachRemaining(list::add);
-        return list;    }
+        return list;
+    }
 
     @Override
     public Payment findPaymentById(long id)

@@ -1,3 +1,36 @@
+*****************************
+
+# For PostgreSQL add the dependency
+
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+</dependency>
+
+Add the DataSourceConfig class to use PostgreSQL
+Add lines to application.properties
+
+# Which db to run
+local.run.db=H2
+# local.run.db=POSTGRESQL
+
+*****************************
+
+To use PostgreSQL locally
+
+Add @PropertySource("file:/Users/lambdajohn/stumpsconfig.properties") to StumpsApplication
+
+Create a file called /Users/lambdajohn/stumpsconfig.properties with the following line:
+
+SPRING.DATASOURCE.URL=jdbc:postgresql://localhost:5432/stumpsdb?password=password&sslmode=prefer&user=postgres
+
+When using @Value - The Hierarchy of where the values are found
+    OS environment variables.
+    Application properties packaged inside your jar (application.properties including YAML and profile variants).
+    @PropertySource annotation on your Main Class
+
+*****************************
+
 # Setup Heroku
 
 heroku login
@@ -10,9 +43,9 @@ heroku config:set OAUTHCLIENTSECRET=lambda-secret -a jrmmba-stumps
 
 Use the heroku GUI to access log
 
-******************************
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# In Java
+# Now In Java
 
 # Add the plugin for heroku
 
@@ -36,22 +69,6 @@ Use the heroku GUI to access log
     </configuration>
 </plugin>
 
-
-# For PostgreSQL add the dependency
-
-<dependency>
-    <groupId>org.postgresql</groupId>
-    <artifactId>postgresql</artifactId>
-</dependency>
-
-Add the DataSourceConfig class to use PostgreSQL
-Add lines to application.properties
-
-# Which db to run
-local.run.db=H2
-# local.run.db=POSTGRESQL
-
-
 # Environment Variables Needed for OAuth2 Authentication Server
 # OAUTHCLIENTID
 # OAUTHCLIENTSECRET
@@ -61,49 +78,18 @@ heroku config -a jrmmba-foundation
 
 Add SimpleCorsFilter.java to handle deploying and CORS issues
 
-******************************
+In application.properties add spring.h2.console.settings.web-allow-others=true
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To deploy, go to
 
 Maven Tab
-Turn off tests
+Turn on Skip Testing
 Maven Goals
 mvn clean heroku:deploy -X
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Problem:
-
-Heroku restarts your application once every 24 hours. It does this automatically; you have no control over it. This is a good thing and is similar to my mantra of restart your computer at least once a day!
-
-However, if you leave your code as originally deployed (with creating the database turned on seeddata active), when Heroku restarts your application, any data changes made in the last 24 hours get wiped out. So much for presient data.
-
-Solution (beta):
-
-Here is a solution. Clunky but works.
-
-Deploy your application as normal using postgresql
-
-When you first deploy your application, in application.properties, you have the following set
-
-spring.jpa.hibernate.ddl-auto=create
-spring.datasource.initialization-mode=always
-
-And you may have a SeedData class.
-
-Make sure your application is running properly.
-
-Now redeploy the same application but with the following changes:
-
-in application.properties
-
-spring.jpa.hibernate.ddl-auto=update
-spring.datasource.initialization-mode=never
-command.line.runner.enabled=false
-
-So, now when your application is restarted by Heroku, seed data is not active and you can keep your old data!
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+****************************
 
 Connect H2 Console to Heroku Postgres 
 
@@ -138,11 +124,12 @@ Saved Settings: Generic PostgreSQL
 Setting Name:   Generic PostgreSQL
 
 Driver Class: org.postgresql.Driver
-JDBC URL:   jdbc:postgresql://localhost:5432/restaurantdb
+JDBC URL:   jdbc:postgresql://localhost:5432/stumpsdb
 User Name:  postgres
 Password:   password
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+****************************
+
 GitHub Heroku Deploy Manually
 
 Fork, Clone
@@ -159,7 +146,8 @@ heroku login
 heroku git:remote -a jrmmba-restaurant
 git subtree push --prefix secured-restaurants-deployed heroku main
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+****************************
+
 GitHub Heroku Autodeploy
 
 see: https://stackoverflow.com/questions/39197334/automated-heroku-deploy-from-subfolder
@@ -173,12 +161,36 @@ Under Settings BuildPack add https://github.com/timanovsky/subdir-heroku-buildpa
 
 Back under Deploy GitHub - pick the branch you want to deploy and enable automatic deploys
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Local Deployment to Postgres - DO NOT FOLLOW THESE STEPS ON HEROKU. HEROKU DOES THIS AUTOMATICALLY!!!
+****************************
 
-Create Database (name only) in Postgres (for example restaurantdb)
+Problem:
 
-Assuming you are using the standard postgres user with a password of password,
-set up an env variable like the following
+Heroku restarts your application once every 24 hours. It does this automatically; you have no control over it. This is a good thing and is similar to my mantra of restart your computer at least once a day!
 
-SPRING_DATASOURCE_URL='jdbc:postgresql://localhost:5432/restaurantdb?password=password&sslmode=prefer&user=postgres'
+However, if you leave your code as originally deployed (with creating the database turned on seeddata active), when Heroku restarts your application, any data changes made in the last 24 hours get wiped out. So much for presient data.
+
+Solution (beta):
+
+Here is a solution.
+
+Deploy your application as normal using postgresql
+
+When you first deploy your application, in application.properties, you have the following set
+
+spring.jpa.hibernate.ddl-auto=create
+spring.datasource.initialization-mode=always
+
+And you may have a SeedData class.
+
+Make sure your application is running properly.
+
+Now add the following config vars to your Heroku app
+
+in application.properties
+
+Config Var                              Value
+spring_jpa_hibernate_ddl-auto           update
+spring_datasource_initialization-mode   never
+command_line_runner_enabled             false
+
+So, now when your application is restarted by Heroku, the values will be read from the config vars overriding what is in application.properties and so seed data is not active and you can keep your old data!

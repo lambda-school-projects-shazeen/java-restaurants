@@ -64,21 +64,31 @@ public class ResourceServerConfig
                 "/createnewuser")
             .permitAll()
             .antMatchers(HttpMethod.POST,
-                "/menus/**", "/payments/**", "/restaurants/**")
+                "/menus/**",
+                "/payments/**",
+                "/restaurants/**")
             .hasAnyRole("ADMIN")
             .antMatchers(HttpMethod.DELETE,
-                "/menus/**", "/payments/**", "/restaurants/**")
+                "/menus/**",
+                "/payments/**",
+                "/restaurants/**")
             .hasAnyRole("ADMIN")
             .antMatchers(HttpMethod.PUT,
-                "/menus/**", "/payments/**", "/restaurants/**")
+                "/menus/**",
+                "/payments/**",
+                "/restaurants/**")
             .hasAnyRole("ADMIN")
-            .antMatchers("/users/**", "/restaurants/**", "/payments/**", "/menus/**",
+            .antMatchers("/users/**",
+                "/restaurants/**",
+                "/payments/**",
+                "/menus/**",
                 "/oauth/revoke-token",
                 "/logout")
             .authenticated()
             .antMatchers("/roles/**")
             .hasAnyRole("ADMIN")
-            .anyRequest().denyAll() // deny any endpoint that is not explicitly given access rights
+            .anyRequest()
+            .denyAll() // deny any endpoint that is not explicitly given access rights
             .and()
             .exceptionHandling()
             .accessDeniedHandler(new OAuth2AccessDeniedHandler());

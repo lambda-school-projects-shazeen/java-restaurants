@@ -491,7 +491,8 @@ public class RestaurantServiceImplUnitTestNoDB
         // I am using Jackson to make a clone of the object
         ObjectMapper objectMapper = new ObjectMapper();
         Restaurant r3 = objectMapper
-            .readValue(objectMapper.writeValueAsString(r2), Restaurant.class);
+            .readValue(objectMapper.writeValueAsString(r2),
+                Restaurant.class);
 
         Mockito.when(restrepos.findById(10L))
             .thenReturn(Optional.of(r3));
@@ -592,7 +593,8 @@ public class RestaurantServiceImplUnitTestNoDB
         // I am using Jackson to make a clone of the object
         ObjectMapper objectMapper = new ObjectMapper();
         Restaurant r3 = objectMapper
-            .readValue(objectMapper.writeValueAsString(r2), Restaurant.class);
+            .readValue(objectMapper.writeValueAsString(r2),
+                Restaurant.class);
 
         Mockito.when(restrepos.findById(10L))
             .thenReturn(Optional.of(r3));
