@@ -10,9 +10,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RestaurantsApplicationTests.class)
+@SpringBootTest(classes = RestaurantsApplicationTests.class,
+properties = {"command.line.runner.enabled=false"})
 public class RestaurantServiceImplUnitTestNoDB
 {
+    //mocks -> create fake data
+    //stubs -> create fake method
 
     @Before
     public void setUp() throws Exception

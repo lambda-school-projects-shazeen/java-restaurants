@@ -13,6 +13,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
+@ConditionalOnProperty(
+    prefix = "command.line.runner",
+    value = "enabled",
+    havingValue = "true",
+    matchIfMissing = true
+)
 @Component
 public class SeedData
     implements CommandLineRunner
